@@ -1,0 +1,7 @@
+node_modules
+config/.thorin
+*.log
+.gitlab-ci.yml
+README.md
+.editorconfig
+sql/
