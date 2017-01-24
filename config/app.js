@@ -5,6 +5,7 @@ const path = require('path');
  */
 module.exports = {
   "settings": {
+    "secret": process.env.APP_SECRET || "YOUR_APPLICATION_SECRET_FOR_GENERATING_API_KEYS",
     "unloq": {
       "key": process.env.UNLOQ_KEY || '',
       "events": "https://events.unloq.io",  // The UNLOQ Events gateway we are going to work with for cache invalidations.

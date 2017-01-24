@@ -4,7 +4,8 @@
  */
 
 const dispatcher = thorin.dispatcher,
-  logger = thorin.logger('socket');
+  logger = thorin.logger('socket'),
+  key = require('../lib/key');
 
 const AUTH_ERROR = thorin.error('AUTH.REQUIRED', 'Invalid or missing authorization token', 401);
 
@@ -15,8 +16,11 @@ let CONNECTED = 0;
 dispatcher
   .addAction('ws#socket.connect')
   .use((intentObj, next) => {
-    // TODO: access token verification
-    const accessToken = intentObj.authorization;
+    const accessToken = intentObj.authorization,
+      isValid = key.verify(accessToken);
+    if (!isValid) {
+      return next(AUTH_ERROR);
+    }
     CONNECTED++;
     logger.trace(`Client connected.`);
     next();
@@ -41,7 +45,11 @@ dispatcher
     if (intentObj.transport === 'ws') {
       return next();
     }
-    // TODO: check auth
+    const accessToken = intentObj.authorization,
+      isValid = key.verify(accessToken);
+    if (!isValid) {
+      return next(AUTH_ERROR);
+    }
     next();
   });
 

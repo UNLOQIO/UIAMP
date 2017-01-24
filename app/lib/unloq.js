@@ -22,7 +22,12 @@ class UnloqAPI {
       key: config.key,
       gateway: config.events
     });
+    let secret = thorin.config('settings.secret');
+    if (secret && secret.length < 32) {
+      logger.warn(`Application secret must have at least 32 characters.`);
+    }
   }
+
 
   run(done) {
     let calls = [];
@@ -50,11 +55,15 @@ class UnloqAPI {
    * */
   dispatch(action, payload, fn) {
     if (typeof fn !== 'function') {
-      return this[client].dispatch(action, payload);
+      return this[client].dispatch(action, payload).catch((e) => {
+        e.ns = 'UNLOQ';
+        throw e;
+      });
     }
     this[client].dispatch(action, payload).then((res) => {
       fn(null, res);
     }).catch((e) => {
+      e.ns = 'UNLOQ';
       fn(e, null);
     });
   }

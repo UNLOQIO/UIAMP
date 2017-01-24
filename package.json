@@ -2,6 +2,12 @@
   "name": "uiamp",
   "author": "UNLOQ Systems",
   "version": "1.0.0",
+  "bin": {
+    "uiamp": "app/cli.js"
+  },
+  "scripts": {
+    "token": "node app/cli.js generate"
+  },
   "dependencies": {
     "thorin": "^1.x",
     "uws": "1.12.0",
