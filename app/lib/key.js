@@ -26,7 +26,7 @@ key.generateKey = function generateKey(key) {
  * */
 key.verify = function verify(key) {
   const secret = thorin.config('settings.secret');
-  if (!secret || secret.length < 32) return true;
+  if (!secret || secret.length < 32) return true; // auth disabled
   if (typeof key !== 'string' || !key) return false;
   if (key.length !== (API_KEY_LENGTH + SIGNATURE_LENGTH))return false;
   let signature = key.substr(0, SIGNATURE_LENGTH),

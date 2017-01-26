@@ -3,13 +3,15 @@ const path = require('path');
 /**
  * Application-specific configuration
  */
+const UNLOQ_EVENTS = process.env.UNLOQ_EVENTS || "https://events.unloq.io",
+  UNLOQ_GATEWAY = process.env.UNLOQ_GATEWAY || "https://api.unloq.io";
 module.exports = {
   "settings": {
     "secret": process.env.APP_SECRET || "YOUR_APPLICATION_SECRET_FOR_GENERATING_API_KEYS",
     "unloq": {
       "key": process.env.UNLOQ_KEY || '',
-      "events": "https://events.unloq.io",  // The UNLOQ Events gateway we are going to work with for cache invalidations.
-      "gateway": "https://api.unloq.io" // The UNLOQ API Gateway we are going to work with
+      "events": UNLOQ_EVENTS,  // The UNLOQ Events gateway we are going to work with for cache invalidations.
+      "gateway": UNLOQ_GATEWAY // The UNLOQ API Gateway we are going to work with
     },
     "cache": {
       "type": "memory", // first, memory
@@ -17,7 +19,7 @@ module.exports = {
       // REDIS-specific configuration
       "namespace": "uiampc:",
       "host": 'localhost',
-      "debug": true,
+      "debug": false,
       "port": 6379
     }
   },
@@ -26,9 +28,7 @@ module.exports = {
     "actionName": "api" // listen to POST /api with {"type": "actionType", "payload": {}}
   },
   "transport.ws": {
-    "debug": true,
-    "options": {
-      wsEngine: 'uws' // use uWS server in stead of ws
-    }
+    "debug": true
   }
 };
+

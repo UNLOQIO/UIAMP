@@ -1,8 +1,11 @@
 Thumbs.db
 *.swp
 .idea
+.git
 *.log
 *.pid
 *.gz
 node_modules
 .thorin
+config/env/development.js
+build.sh
