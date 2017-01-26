@@ -11,3 +11,11 @@ docker run --env APP_SECRET=YOUR_RANDOM_32_LENGTH_CHARACTER_APP_SECRET \
            --env PORT=6801 \
            snupa/uiamp
 ```
+
+#### How to create a UIAMP client key
+```
+docker exec -it CONTAINER_ID npm run token
+```
+
+#### Node.js client
+- https://github.com/UNLOQIO/UIAMP-client
