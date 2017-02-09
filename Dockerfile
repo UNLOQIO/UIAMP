@@ -5,6 +5,8 @@ ENV NODE_ENV production
 ENV PORT 6801
 ENV APP_SECRET ''
 ENV UNLOQ_KEY ''
+#ENV UNLOQ_EVENTS
+#ENV UNLOQ_GATEWAY
 
 # Create app directory
 WORKDIR /$user/src/app

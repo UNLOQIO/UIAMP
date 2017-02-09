@@ -5,6 +5,7 @@ const path = require('path');
  */
 const UNLOQ_EVENTS = process.env.UNLOQ_EVENTS || "https://events.unloq.io",
   UNLOQ_GATEWAY = process.env.UNLOQ_GATEWAY || "https://api.unloq.io";
+
 module.exports = {
   "settings": {
     "secret": process.env.APP_SECRET || "YOUR_APPLICATION_SECRET_FOR_GENERATING_API_KEYS",
