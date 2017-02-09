@@ -84,7 +84,12 @@ dispatcher
         return;
       }
       // IF we have no category, we do not know what to match.
-      if (!input.category || entities.length === 0) return;
+      if (entities.length === 0) return;
+      if (!input.action && !input.category) {
+        result = entities;
+        return;
+      }
+
       // We now proceed to check the permissions against any input data.
       let validActions = [];
       if (input.action instanceof Array) {
