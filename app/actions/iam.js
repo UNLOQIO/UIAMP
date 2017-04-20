@@ -24,6 +24,7 @@ dispatcher
     user_id: dispatcher.validate('STRING').default(null),
     category: dispatcher.validate('STRING').default(null),
     action: dispatcher.validate('ARRAY', {type: 'string', max: 4}).default(null),
+    pattern: dispatcher.validate('BOOLEAN').default(false), // when checking category, should we match as a patterned prefix?
     entity_type: dispatcher.validate('STRING').default(null),
     entity_id: dispatcher.validate('STRING').default(null)
   })
@@ -50,7 +51,6 @@ dispatcher
     }
     let entities = [],
       fromCache = false;
-
     calls.push(() => {
       return cacheLib.hit(data).then((items) => {
         if (items != null) {

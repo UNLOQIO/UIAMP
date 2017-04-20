@@ -16,7 +16,7 @@ class UnloqAPI {
     let gateway = tmp.protocol + '//' + tmp.host + '/dispatch';
     this[client] = thorin.fetcher('unloq', gateway, {
       authorization: config.key,
-      timeout: 3000
+      timeout: 6000
     });
     this[events] = new UnloqEvents({
       key: config.key,
@@ -39,11 +39,13 @@ class UnloqAPI {
 
     /* initiate events */
     calls.push(() => {
+      logger.trace(`Connecting to UNLOQ events`);
       return this[events].connect();
     });
 
     /* Subscribe to our UNLOQ events for various namespace */
     calls.push(() => {
+      logger.trace(`Subscribing to cache events`);
       return thorin.lib('cache').subscribe(this[events]);
     });
 
@@ -72,7 +74,7 @@ class UnloqAPI {
    * Given a list of permission UNLOQ IAMs, it will test to see
    * if the given input is match for any items.
    * The IAM pattern is:
-   *  iam:$category:$permission:$userId:$entityType#entityId
+   *  iam:$category:$permission:$userId:$entityField#entityId
    * ARGUMENTS
    *  - items - array of permission strings.
    *  - data.category - the category to match against.
@@ -82,6 +84,7 @@ class UnloqAPI {
    * */
   matchPermission(items, data) {
     let matched = false,
+      entityField,
       matchPerm;
     for (let i = 0, len = items.length; i < len; i++) {
       let iam = items[i];
@@ -92,7 +95,11 @@ class UnloqAPI {
         continue;
       }
       // iam[0] - is category
-      if (iam[0] !== data.category) continue;
+      if (iam[0] !== data.category) {
+        // Check if we want pattern matching or not.
+        if (data.pattern !== true || typeof data.category !== 'string') continue;
+        if (data.category.indexOf(iam[0]) !== 0) continue;
+      }
       // check against any given actions.
       if (data.action) {
         let iamAct = this.fromPermissionBinary(iam[1]),
@@ -108,9 +115,9 @@ class UnloqAPI {
         let entity = iam[3];
         if (!entity) continue;
         let tmp = entity.split('#'),
-          entityType = tmp[0],
+          entityField = tmp[0],
           entityId = tmp[1];
-        if (data.entity_type !== entityType) continue;
+        if (data.entity_type !== entityField) continue;
         if (data.entity_id !== null) {
           if (typeof entityId === 'undefined') continue;
           if (data.entity_id !== entityId) continue;
@@ -119,11 +126,17 @@ class UnloqAPI {
       // IF we reached this, that means that we've passed all filters.
       matched = true;
       matchPerm = items[i];
+      if (iam[3]) { // entity type.
+        entityField = iam[3];
+      }
       break;
     }
     let res = {
       match: matched
     };
+    if (entityField) {  // we have the entityField.
+      res.entity_field = entityField;
+    }
     if (matched) {
       res.permission = matchPerm;
     }
