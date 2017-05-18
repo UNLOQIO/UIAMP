@@ -10,6 +10,7 @@ dispatcher
   .alias('GET', '/')
   .alias('GET', '/api')
   .alias('GET', '/ping')
+  .alias('GET', '/check/uiamp')
   .debug(false)
   .aliasOnly();
 

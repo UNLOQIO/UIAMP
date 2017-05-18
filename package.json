@@ -1,7 +1,7 @@
 {
   "name": "uiamp",
   "author": "UNLOQ Systems",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "bin": {
     "uiamp": "app/cli.js"
   },
